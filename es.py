@@ -1,4 +1,7 @@
+import os
 from typing import Any, List
+
+import pandas as pd
 
 from elasticsearch import AsyncElasticsearch, NotFoundError
 from elasticsearch.helpers import async_bulk
@@ -83,19 +86,30 @@ async def main():
     # Работа с Elasticsearch
     # await es_client.create_index("test_index")
     # await es_client.add_docs("test_index", [{"name": "doc1"}, {"name": "doc2"}])
-
+    '''
     query = {
         "bool": {"must": [{"match": {"text_lem": "Как ответить на требование"}}, {"match_phrase": {"pubs": "uss"}}]}
-    }
+    }'''
+    '''
+    query = {
+        "bool": {"must": [{"match": {"text": "ссылки"}}, {"match_phrase": {"pubid": "483"}}]}
+    }'''
+
+    query = {"match": {"request.text": "отпуск*"}}
+
     # response = await es_client.search_query("publicator_paragraphs*", {"match_all": {}})
-    response = await es_client.search_query("publicator_paragraphs*", query)
+    response = await es_client.search_query("results*", query)
     for i in response:
         print(i)
 
-    print(len(response["hits"]["hits"]))
-    print(response["hits"]["hits"][:5])
-
+    texts = set([d["_source"]["request"]["text"] for d in response["hits"]["hits"]])
+    texts_dcts = [{"text": text} for text in texts]
+    texts_df = pd.DataFrame(texts_dcts)
+    print(texts_df)
+    
     # Закрытие соединения
+    texts_df.to_csv(os.path.join("data", "vacations_queries.csv"), sep="\t", index=False) 
+
     await es_client.close()
 
 

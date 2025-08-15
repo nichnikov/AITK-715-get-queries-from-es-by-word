@@ -26,11 +26,11 @@ class Parameters(BaseModel):
     es_max_retries: int = 50
     es_retry_on_timeout: bool = True
     es_chunk_size: int = 300
-    es_max_hits: int = 100  # 200
-    es_index: str = "ch_documents*"  # "ch_documents"  # "publicator_paragraphs*"
-    es_first_field: str = "pub_aliases"  # "pub_aliases" "sys_ids"
-    es_mod_id_name: str = "mod_id"  # наименование поля модуля в индексе
-    es_doc_id_name: str = "doc_id"  # наименование поля документа в индексе
+    es_max_hits: int = 10000  # 200
+    es_index: str = "results*"  # "ch_documents"  # "publicator_paragraphs*"
+    # es_first_field: str = "pubid"  # "pub_aliases" "sys_ids"
+    # es_mod_id_name: str = "mod_id"  # наименование поля модуля в индексе "mod_id"
+    # es_doc_id_name: str = "doc_id"  # наименование поля документа в индексе "doc_id"
     es_second_field: str = "text_lem"  # "lemmatized_text"
     es_third_field: str = "title_lem"  # "lemmatized_text"
     stopwords_files: List[str] = []
